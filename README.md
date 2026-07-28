@@ -1,4 +1,4 @@
-# The Hallowstead Abbwy
+# The Hallowstead Abbey
 This is a project connected to the [Hallowstead Abbey](https://hallowsteadabbey.vercel.app/) website.
 
 Any books submitted to the website or the [Discord Server](https://discord.com/invite/zHS6av77ws) are meant to be implemented within this game. (We still ask for consent).
