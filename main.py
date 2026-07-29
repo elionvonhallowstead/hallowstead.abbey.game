@@ -3,30 +3,40 @@ from init import *
 util.clear()
 
 imgs = Lib_imgs("./imgs").get()
+books = Lib_imgs("./imgs/books").get()
 
-winSize = (imgs["bg_hushhouse.png"].get_rect()[2:])
+winSize = tuple(imgs["bg_hushhouse.png"].get_rect()[2:])
 Window = Window(winSize, imgs["bg_hushhouse.png"])
 
-Book = Item(imgs["bookCover.png"], 0.1, (100, 100))
+books = {key: Item(books[key], winSize, scale=0.1, pos=(0, 0)) for key in books.keys()}
 
 fps = 60
 
 running = True
 while running:
-    pygame.time.Clock().tick(fps)
-    
-    Window.renderingQueue(Book.get())
-
-    Window.update(*Window.draw(Window.getQueue()))
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-            break
+
+        if event.type == pygame.VIDEORESIZE:
+            winSize = Window.updateWinSize()
+            for key in books.keys():
+                books.get(key).updateCoords(winSize)
+
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == pygame.BUTTON_LEFT:
-            Book.dragging(True)
+            for key in books.keys():
+                books.get(key).dragging(True)
         elif event.type == pygame.MOUSEBUTTONUP and event.button == pygame.BUTTON_LEFT:
-            Book.dragging(False)
+            for key in books.keys():
+                books.get(key).dragging(False)
+
         if pygame.mouse.get_pressed()[0]:
-            Book.drag()
+            for key in books.keys():
+                books.get(key).drag()
+
+    Window.renderingQueue(*[books.get(key).get() for key in books.keys()])
+
+    Window.update(*Window.draw(Window.getQueue()))
+
+    pygame.time.Clock().tick(fps)
 Window.quit()
